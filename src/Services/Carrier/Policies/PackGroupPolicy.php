@@ -5,11 +5,7 @@ namespace App\Services\Carrier\Policies;
 /**
  *
  */
-abstract class Policy
+class PackGroupPolicy extends Policy
 {
-
-    public function test() {
-
-    }
 
 }

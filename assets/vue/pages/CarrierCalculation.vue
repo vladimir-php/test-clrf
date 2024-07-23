@@ -11,6 +11,15 @@
         </div>
 
 
+        <div class="flex space-x-4">
+            <div class="w-full px-4 py-2">
+                <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option selected>Choose a carrier</option>
+                    <option v-for="(name, key) in this.carriers" :value="name">{{ name }}</option>
+                </select>
+            </div>
+        </div>
+
         <div class="flex justify-end space-x-4 px-4 py-2">
             <submit-button @submit="submitRequest" :loading="loading" />
         </div>
@@ -29,6 +38,7 @@
 import axios from 'axios'
 import InputField from "../components/form/base/InputField.vue";
 import SubmitButton from "../components/form/base/SubmitButton.vue";
+import Query from "../../js/query/Query";
 
 export default {
     computed: {
@@ -45,15 +55,16 @@ export default {
             response: null,
             responseSuccess: false,
             responseOutput: '',
+            carriers: [],
             loading: false
         }
     },
     async mounted() {
-        const response = await axios({
+        const response = await (new Query).query({
             method: 'get',
-            url: '/api/v1/tag?type=interest',
+            url: '/api/v1/carrier',
         });
-        console.error(response);
+        this.carriers = response.data().list;
     },
     created() {
     },

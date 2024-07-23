@@ -1,3 +1,0 @@
-carrier:
-  - { name: TransCompany, policy: root }
-  - { name: PackGroup, policy: root }

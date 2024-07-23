@@ -2,31 +2,48 @@
 
 namespace App\Controller;
 
+use App\Services\Carrier\CarrierService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
  *
  */
-#[Route('/carrier')]
+#[Route('/api/v1/carrier')]
 class CarrierController extends AbstractController
 {
 
     /**
+     * @param  CarrierService  $service
+     *
      * @return Response
-     * @throws \Exception
      */
-    #[Route('/')]
-    public function list(): Response
+    #[Route('/', methods: 'GET')]
+    public function list(CarrierService $service): Response
     {
-        $number = random_int(0, 100);
-
-
-        dd($this->container->get('carrier_service'));
-
-        // dd($this->getParameter('carrier'));
-
-        return $this->json([1,2,4]);
+        return $this->json(['success' => true, 'list' => $service->getNames()]);
     }
+
+
+    /**
+     * @param  CarrierService  $service
+     *
+     * @return Response
+     */
+    #[Route('/calculate-price', methods: 'POST')]
+    public function calculatePrice(Request $request, CarrierService $service): Response
+    {
+        dd($request->get('test'));
+        try {
+            $policy = $service->createPolicy();
+        }
+        catch (\Exception $e) {
+
+        }
+
+        return $this->json($service->getNames());
+    }
+
 }
