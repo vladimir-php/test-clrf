@@ -71,6 +71,9 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
+
+    // Enable PostCSS support - https://tailwindcss.com/docs/guides/symfony
+    .enablePostCssLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();
