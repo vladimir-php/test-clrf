@@ -17,13 +17,11 @@ class CarrierController extends AbstractController
      * @return Response
      * @throws \Exception
      */
-    #[Route('/test')]
-    public function number(): Response
+    #[Route('/')]
+    public function list(): Response
     {
         $number = random_int(0, 100);
 
-        return new Response(
-            '<html><body>Lucky number: '.$number.'</body></html>'
-        );
+        return $this->json([1,2,4]);
     }
 }

@@ -8,3 +8,13 @@ import './bootstrap.js';
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+
+import {createApp} from 'vue'
+import App from './vue/App.vue'
+import axios from 'axios'
+import router from './vue/router'
+
+const app = createApp(App);
+app.config.globalProperties.$axios = axios;
+app.use(router);
+app.mount('#app');

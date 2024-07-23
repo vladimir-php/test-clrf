@@ -74,6 +74,9 @@ Encore
 
     // Enable PostCSS support - https://tailwindcss.com/docs/guides/symfony
     .enablePostCssLoader()
+
+    // Enable VueJS loader - https://symfony.com/bundles/ux-vue/current/index.html
+    .enableVueLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();
