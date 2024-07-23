@@ -22,6 +22,11 @@ class CarrierController extends AbstractController
     {
         $number = random_int(0, 100);
 
+
+        dd($this->container->get('carrier_service'));
+
+        // dd($this->getParameter('carrier'));
+
         return $this->json([1,2,4]);
     }
 }

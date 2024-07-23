@@ -9,7 +9,7 @@
                 <input-field placeholder="Cargo weight"></input-field>
             </div>
         </div>
-        
+
 
         <div class="flex justify-end space-x-4 px-4 py-2">
             <submit-button @submit="submitRequest" :loading="loading" />
