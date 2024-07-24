@@ -13,18 +13,18 @@ export default class Response {
 
     /**
      *
-     * @returns {false|(function(): *)|Event|*}
+     * @returns {*}
      */
-    success() {
-        return this.data().success;
+    rawData() {
+        return this.response.data;
     }
 
     /**
      *
-     * @returns {*}
+     * @returns {false|(function(): *)|Event|*}
      */
-    rawData() {
-        return this.response;
+    success() {
+        return this.rawData().success;
     }
 
     /**
@@ -32,7 +32,7 @@ export default class Response {
      * @returns {*}
      */
     data() {
-        return this.response.data ?? [];
+        return this.rawData().data ?? [];
     }
 
     /**
@@ -40,7 +40,7 @@ export default class Response {
      * @returns {*}
      */
     errors() {
-        return this.response.data.errors ?? this.response.data;
+        return this.rawData().errors ?? this.rawData();
     }
 
 }

@@ -63,7 +63,7 @@ export default {
             url: '/api/v1/carrier',
         });
         if (response.success() ) {
-            this.carriers = response.data().list;
+            this.carriers = response.data().carriers;
         }
         else {
             this.responseOutput = response;

@@ -27,7 +27,9 @@ class CarrierController extends AbstractController
     #[Route('/', methods: 'GET')]
     public function list(CarrierRepository $repository): Response
     {
-        return $this->json(['success' => true, 'list' => $repository->getIdNameList()]);
+        return $this->json(['success' => true,
+            'data' => ['carriers' => $repository->getIdNameList()]]
+        );
     }
 
 
@@ -48,6 +50,8 @@ class CarrierController extends AbstractController
     ): Response
     {
         try {
+
+            // Carrier calc price request validation
             $request->validate();
 
             // Trying to get a carrier by ID
