@@ -86,11 +86,7 @@ abstract class Validator
             return;
         }
 
-        $exception = new ValidationException();
-        foreach ($errors as $field => $messages) {
-            $exception->addErrors($field, $messages);
-        }
-        throw $exception;
+        throw new ValidationException($errors);
     }
 
     /**
