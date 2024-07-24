@@ -24,7 +24,7 @@
             <div><div class="px-4 py-4 text-center text-2xl font-bold">Price: {{ price ? price + ' EUR' : '' }}</div></div>
         </div>
         <div class="flex justify-end">
-            <div><submit-button @submit="submitRequest" :loading="loading" /></div>
+            <div><submit-button @submit="submitRequest" title="Calculate Price" :loading="loading" /></div>
         </div>
 
     </div>
