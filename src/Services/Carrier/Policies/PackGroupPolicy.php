@@ -2,20 +2,22 @@
 
 namespace App\Services\Carrier\Policies;
 
+use App\Services\Carrier\Rules\Calculations\RatioCalculation;
+use App\Services\Carrier\Rules\Conditions\NullCondition;
+use App\Services\Carrier\Rules\Rule;
+
 /**
  *
  */
-class PackGroupPolicy implements PolicyInterface
+class PackGroupPolicy extends Policy
 {
 
     /**
-     * @param  int|float  $weight
      *
-     * @return int|float
      */
-    public function calculate(int|float $weight): int|float
+    public function __construct()
     {
-        return 0;
+        $this->addRule(new Rule(new NullCondition(), new RatioCalculation(1)));
     }
 
 }

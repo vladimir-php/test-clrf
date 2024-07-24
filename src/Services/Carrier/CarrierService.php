@@ -13,13 +13,13 @@ class CarrierService
 
     /**
      * @param  PolicyInterface  $policy
-     * @param  int|float        $price
+     * @param  int|float        $weight
      *
      * @return int|float
      */
-    public function calculate(PolicyInterface $policy, int|float $price): int|float
+    public function calculate(PolicyInterface $policy, int|float $weight): int|float
     {
-        return $policy->calculate($price);
+        return $policy->calculate($weight);
     }
 
 

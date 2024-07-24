@@ -2,20 +2,24 @@
 
 namespace App\Services\Carrier\Policies;
 
+use App\Services\Carrier\Rules\Calculations\FixedCalculation;
+use App\Services\Carrier\Rules\Conditions\GreaterThanOrEqualCondition;
+use App\Services\Carrier\Rules\Conditions\LessThanCondition;
+use App\Services\Carrier\Rules\Rule;
+
 /**
  *
  */
-class TransCompanyPolicy implements PolicyInterface
+class TransCompanyPolicy extends Policy
 {
 
     /**
-     * @param  int|float  $weight
      *
-     * @return int|float
      */
-    public function calculate(int|float $weight): int|float
+    public function __construct()
     {
-        return 0;
+        $this->addRule(new Rule(new LessThanCondition(10), new FixedCalculation(20)))
+            ->addRule(new Rule(new GreaterThanOrEqualCondition(10), new FixedCalculation(100)));
     }
 
 }
