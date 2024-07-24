@@ -7,13 +7,16 @@
             @input="$emit('update:modelValue', $event.target.value)"
             :placeholder="placeholder"
         >
-        <p v-for="(error, index) in errors" class="mt-2 text-sm text-red-600 dark:text-red-500">{{ error }}</p>
+        <field-errors :errors="errors"></field-errors>
     </div>
 </template>
 
 <script>
 
+import FieldErrors from "./FieldErrors.vue";
+
 export default {
+    components: {FieldErrors},
     props: {
         errors: {
             type: Array,

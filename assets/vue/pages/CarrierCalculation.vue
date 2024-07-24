@@ -16,11 +16,9 @@
                     <option selected>Choose a carrier</option>
                     <option v-for="(carrier, key) in this.carriers" :value="carrier.id">{{ carrier.name }}</option>
                 </select>
-                <p v-for="(error, index) in errors.carrier_id ?? []" class="mt-2 text-sm text-red-600 dark:text-red-500">{{ error }}</p>
+                <field-errors :errors="errors.carrier_id ?? []"></field-errors>
             </div>
         </div>
-
-
 
         <div class="flex justify-center">
             <div><div class="px-4 py-4 text-center text-2xl font-bold">Price: {{ price ? price + ' EUR' : '' }}</div></div>
@@ -37,11 +35,13 @@
 import InputField from "../components/form/base/InputField.vue";
 import SubmitButton from "../components/form/base/SubmitButton.vue";
 import Query from "../../js/query/Query";
+import FieldErrors from "../components/form/base/FieldErrors.vue";
 
 export default {
     computed: {
     },
     components: {
+        FieldErrors,
         InputField,
         SubmitButton,
     },

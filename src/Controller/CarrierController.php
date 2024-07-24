@@ -34,7 +34,7 @@ class CarrierController extends AbstractController
 
 
     /**
-     * @param  CarrierCalcPriceValidator  $request
+     * @param  CarrierCalcPriceValidator  $validator
      * @param  CarrierRepository          $carrierRepository
      * @param  CarrierService             $service
      * @param  PolicyFactory              $policyFactory
@@ -43,7 +43,7 @@ class CarrierController extends AbstractController
      */
     #[Route('/calculate-price', methods: 'POST')]
     public function calculatePrice(
-        CarrierCalcPriceValidator $request,
+        CarrierCalcPriceValidator $validator,
         CarrierRepository $carrierRepository,
         CarrierService $service,
         PolicyFactory $policyFactory,
@@ -52,10 +52,10 @@ class CarrierController extends AbstractController
         try {
 
             // Carrier calc price request validation
-            $request->validate();
+            $validator->validate();
 
             // Trying to get a carrier by ID
-            $carrier = $carrierRepository->find($request->get('carrier_id') );
+            $carrier = $carrierRepository->find($validator->get('carrier_id') );
             if (!$carrier) {
                 throw (new ValidationException())->addError('carrier_id', 'Undefined carrier.');
             }
@@ -64,7 +64,7 @@ class CarrierController extends AbstractController
             $policy = $policyFactory->create($carrier->getPolicy());
 
             // Calculating a price for the weight
-            $price = $service->calculate($policy, $request->get('weight'));
+            $price = $service->calculate($policy, $validator->get('weight'));
 
             return $this->json(['success' => true, 'data' => ['price' => $price]]);
         }

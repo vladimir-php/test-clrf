@@ -30,7 +30,7 @@ class ValidationException extends Exception
      * @param  string  $field
      * @param  string  $message
      *
-     * @return void
+     * @return $this
      */
     public function addError(string $field, string $message): self
     {
