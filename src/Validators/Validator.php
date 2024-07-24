@@ -6,7 +6,6 @@ use App\Exceptions\ValidationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  *
@@ -28,7 +27,7 @@ abstract class Validator
 
         if ($this->autoValidateRequest()) {
             try {
-                $this->validate($this->data);
+                $this->validate();
             }
 
             // ?? @todo: to hardcoded: make a separate Response class to avoid duplication
@@ -71,17 +70,25 @@ abstract class Validator
      */
     public function validateData(array $data): void
     {
-        $errors = $this->validator->validate($data, new Assert\Collection($this->constraints()));
+        $errors = [];
+        foreach($this->constraints() as $field => $asserts) {
+            $errorMessages = $this->validator->validate(array_key_exists($field, $data) ? $data[$field] : null, $asserts);
+            if (!count($errorMessages) ) {
+                continue;
+            }
+
+            $errors[$field] = [];
+            foreach($errorMessages as $errorMessage) {
+                $errors[$field][] = $errorMessage->getMessage();
+            }
+        }
         if (!count($errors) > 0) {
             return;
         }
 
         $exception = new ValidationException();
-        foreach ($errors as $message) {
-            $exception->addError(
-                $message->getPropertyPath(),
-                $message->getMessage(),
-            );
+        foreach ($errors as $field => $messages) {
+            $exception->addErrors($field, $messages);
         }
         throw $exception;
     }

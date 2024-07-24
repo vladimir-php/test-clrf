@@ -34,10 +34,22 @@ class ValidationException extends Exception
      */
     public function addError(string $field, string $message): self
     {
-        $this->errors[] = [
-            'field' => $field,
-            'message' => $message,
-        ];
+        if (!array_key_exists($field, $this->errors) ) {
+            $this->errors[$field] = [];
+        }
+        $this->errors[$field][] = $message;
+        return $this;
+    }
+
+    /**
+     * @param  string  $field
+     * @param  array   $messages
+     *
+     * @return $this
+     */
+    public function addErrors(string $field, array $messages): self
+    {
+        $this->errors[$field] = $messages;
         return $this;
     }
 

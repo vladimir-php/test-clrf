@@ -6,7 +6,7 @@
 
         <div class="flex space-x-4">
             <div class="w-full px-4 py-2">
-                <input-field v-model="weight" :value="weight" placeholder="Cargo weight"></input-field>
+                <input-field v-model="weight" :value="weight" :errors="errors.weight" placeholder="Cargo weight"></input-field>
             </div>
         </div>
 
@@ -54,7 +54,8 @@ export default {
             carriers: [],
             carrier_id: null,
             weight: null,
-            loading: false
+            loading: false,
+            errors: {},
         }
     },
     async mounted() {
@@ -73,6 +74,7 @@ export default {
     },
     methods: {
         async submitRequest() {
+            this.errors = {};
             this.loading = true;
 
             const response = await (new Query).query({
@@ -83,6 +85,12 @@ export default {
                     carrier_id: this.carrier_id,
                 }
             });
+
+            if (!response.success() ) {
+                for(const error in response.errors() ) {
+                    this.errors[error['field']] = error['messasge'];
+                }
+            }
 
             this.responseOutput = response.success() ? response.data() : response.errors();
             this.responseSuccess = response.success();
