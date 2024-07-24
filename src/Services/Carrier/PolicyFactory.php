@@ -2,7 +2,7 @@
 
 namespace App\Services\Carrier;
 
-use App\Services\Carrier\Policies\Policy;
+use App\Services\Carrier\Policies\PolicyInterface;
 use Exception;
 
 
@@ -31,17 +31,17 @@ class PolicyFactory
     /**
      * @param  string  $name
      *
-     * @return Policy
+     * @return PolicyInterface
      * @throws Exception
      */
-    public function create(string $name): Policy
+    public function create(string $name): PolicyInterface
     {
         $class = $this->findClass($name);
         if (!$class) {
             throw new Exception('Policy class for '.$name.'does not found.');
         }
-        if (!$class instanceof Policy) {
-            throw new Exception('Policy '.$name.'is not an instance of '. Policy::class .'.');
+        if (is_subclass_of($class, 'PolicyInterface')) {
+            throw new Exception('Policy '.$name.' is not an instance of '. PolicyInterface::class .'.');
         }
         return new $class();
     }

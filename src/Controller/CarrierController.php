@@ -5,13 +5,11 @@ namespace App\Controller;
 use App\Exceptions\ValidationException;
 use App\Repository\CarrierRepository;
 use App\Services\Carrier\CarrierService;
+use App\Services\Carrier\PolicyFactory;
 use App\Validators\Carrier\CarrierCalcPriceValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Exception;
 
 /**
@@ -43,7 +41,8 @@ class CarrierController extends AbstractController
     public function calculatePrice(
         CarrierCalcPriceValidator $request,
         CarrierRepository $carrierRepository,
-        CarrierService $service
+        CarrierService $service,
+        PolicyFactory $policyFactory,
     ): Response
     {
         try {
@@ -52,15 +51,23 @@ class CarrierController extends AbstractController
             // Trying to get a carrier by ID
             $carrier = $carrierRepository->find($request->get('carrier_id') );
             if (!$carrier) {
-                throw (new ValidationException())
-                    ->addError('carrier_id', 'Undefined carrier.');
+                throw (new ValidationException())->addError('carrier_id', 'Undefined carrier.');
             }
+
+            // Getting a policy by a carrier
+            $policy = $policyFactory->create($carrier->getPolicy());
+
+            // Calculating a price for the weight
+            $price = $service->calculate($policy, $request->get('weight'));
+
+            return $this->json(['success' => true, 'data' => ['price' => $price]]);
         }
         catch (ValidationException $e) {
             return $this->json(['success' => false, 'errors' => $e->getErrors()]);
         }
-
-        return $this->json([]);
+        catch (Exception $e) {
+            return $this->json(['success' => false, 'errors' => $e->getMessage()]);
+        }
     }
 
 }

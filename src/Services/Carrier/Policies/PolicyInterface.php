@@ -5,7 +5,7 @@ namespace App\Services\Carrier\Policies;
 /**
  *
  */
-class TransCompanyPolicy implements PolicyInterface
+interface PolicyInterface
 {
 
     /**
@@ -13,9 +13,6 @@ class TransCompanyPolicy implements PolicyInterface
      *
      * @return int|float
      */
-    public function calculate(int|float $weight): int|float
-    {
-        return 0;
-    }
+    public function calculate(int|float $weight): int|float;
 
 }

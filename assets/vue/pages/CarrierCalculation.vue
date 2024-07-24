@@ -6,13 +6,13 @@
 
         <div class="flex space-x-4">
             <div class="w-full px-4 py-2">
-                <input-field placeholder="Cargo weight"></input-field>
+                <input-field v-model="weight" :value="weight" placeholder="Cargo weight"></input-field>
             </div>
         </div>
 
         <div class="flex space-x-4">
             <div class="w-full px-4 py-2">
-                <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select v-model="carrier_id" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option selected>Choose a carrier</option>
                     <option v-for="(carrier, key) in this.carriers" :value="carrier.id">{{ carrier.name }}</option>
                 </select>
@@ -23,9 +23,7 @@
             <submit-button @submit="submitRequest" :loading="loading" />
         </div>
 
-        <!--
         <response-output :success="responseSuccess" :output="responseOutput" />
-        -->
 
     </div>
 
@@ -35,6 +33,7 @@
 import axios from 'axios'
 import InputField from "../components/form/base/InputField.vue";
 import SubmitButton from "../components/form/base/SubmitButton.vue";
+import ResponseOutput from "../components/form/base/ResponseOutput.vue";
 import Query from "../../js/query/Query";
 
 export default {
@@ -42,17 +41,19 @@ export default {
     },
     components: {
         InputField,
-        SubmitButton
+        SubmitButton,
+        ResponseOutput,
     },
     props: {
     },
     name: "Carrier Calculation",
     data() {
         return {
-            response: null,
             responseSuccess: false,
             responseOutput: '',
             carriers: [],
+            carrier_id: null,
+            weight: null,
             loading: false
         }
     },
@@ -61,7 +62,12 @@ export default {
             method: 'get',
             url: '/api/v1/carrier',
         });
-        this.carriers = response.data().list;
+        if (response.success() ) {
+            this.carriers = response.data().list;
+        }
+        else {
+            this.responseOutput = response;
+        }
     },
     created() {
     },
@@ -69,18 +75,19 @@ export default {
         async submitRequest() {
             this.loading = true;
 
-            /*
-            let query = new Query();
-            this.response = await query.queryRequest(this.request);
+            const response = await (new Query).query({
+                method: 'post',
+                url: '/api/v1/carrier/calculate-price',
+                data: {
+                    weight: this.weight,
+                    carrier_id: this.carrier_id,
+                }
+            });
 
-            let outputData = this.response.success() ? this.response.data() : this.response.rawData();
-            this.responseOutput = JSON.stringify(outputData, null, 2);
-            this.responseSuccess = this.response.success();
+            this.responseOutput = response.success() ? response.data() : response.errors();
+            this.responseSuccess = response.success();
 
-             */
-            // this.loading = false;
-
-            this.$emit('onResponse', outputData, this.responseSuccess);
+            this.loading = false;
         },
     }
 }
