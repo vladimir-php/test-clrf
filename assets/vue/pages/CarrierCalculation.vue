@@ -12,10 +12,11 @@
 
         <div class="flex space-x-4">
             <div class="w-full px-4 py-2">
-                <select v-model="carrier_id" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select v-model="carrier_id" id="countries" :class="(!errors.carrier_id || !errors.carrier_id.length) ? 'field' : 'field-error'">
                     <option selected>Choose a carrier</option>
                     <option v-for="(carrier, key) in this.carriers" :value="carrier.id">{{ carrier.name }}</option>
                 </select>
+                <p v-for="(error, index) in errors.carrier_id ?? []" class="mt-2 text-sm text-red-600 dark:text-red-500">{{ error }}</p>
             </div>
         </div>
 
@@ -55,7 +56,10 @@ export default {
             carrier_id: null,
             weight: null,
             loading: false,
-            errors: {},
+            errors: {
+                weight: [],
+                carrier_id: [],
+            },
         }
     },
     async mounted() {
@@ -87,9 +91,10 @@ export default {
             });
 
             if (!response.success() ) {
-                for(const error in response.errors() ) {
-                    this.errors[error['field']] = error['messasge'];
+                for(const field in response.errors() ) {
+                    this.errors[field] = response.errors()[field];
                 }
+                console.error(this.errors[field]);
             }
 
             this.responseOutput = response.success() ? response.data() : response.errors();
