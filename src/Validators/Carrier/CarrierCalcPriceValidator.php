@@ -27,6 +27,7 @@ class CarrierCalcPriceValidator extends Validator
                 new Assert\NotBlank(),
                 new Assert\Type('numeric'),
                 new Assert\Positive(),
+                new Assert\Length(null, 1, 10),
             ],
         ];
     }

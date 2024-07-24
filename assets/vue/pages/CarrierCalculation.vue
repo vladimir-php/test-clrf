@@ -20,21 +20,22 @@
             </div>
         </div>
 
-        <div class="flex justify-end space-x-4 px-4 py-2">
-            <submit-button @submit="submitRequest" :loading="loading" />
-        </div>
 
-        <response-output :success="responseSuccess" :output="responseOutput" />
+
+        <div class="flex justify-center">
+            <div><div class="px-4 py-4 text-center text-2xl font-bold">Price: {{ price ? price + ' EUR' : '' }}</div></div>
+        </div>
+        <div class="flex justify-end">
+            <div><submit-button @submit="submitRequest" :loading="loading" /></div>
+        </div>
 
     </div>
 
 </template>
 <script>
 
-import axios from 'axios'
 import InputField from "../components/form/base/InputField.vue";
 import SubmitButton from "../components/form/base/SubmitButton.vue";
-import ResponseOutput from "../components/form/base/ResponseOutput.vue";
 import Query from "../../js/query/Query";
 
 export default {
@@ -43,18 +44,16 @@ export default {
     components: {
         InputField,
         SubmitButton,
-        ResponseOutput,
     },
     props: {
     },
     name: "Carrier Calculation",
     data() {
         return {
-            responseSuccess: false,
-            responseOutput: '',
             carriers: [],
             carrier_id: null,
             weight: null,
+            price: null,
             loading: false,
             errors: {
                 weight: [],
@@ -94,11 +93,10 @@ export default {
                 for(const field in response.errors() ) {
                     this.errors[field] = response.errors()[field];
                 }
-                console.error(this.errors[field]);
             }
-
-            this.responseOutput = response.success() ? response.data() : response.errors();
-            this.responseSuccess = response.success();
+            else {
+                this.price = response.data().price;
+            }
 
             this.loading = false;
         },
