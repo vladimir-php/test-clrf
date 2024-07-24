@@ -24,8 +24,9 @@ services:
     # please note that last definitions always *replace* previous ones
 
     # explicitly configure the service
-    App\Services\Carrier\CarrierService:
+
+    App\Services\Carrier\PolicyFactory:
         arguments:
-            $carriers:
-                - { name: TransCompany, policy: App\Services\Carrier\Policies\TransCompanyPolicy }
-                - { name: PackGroup, policy: App\Services\Carrier\Policies\PackGroupPolicy }
+            $policies:
+                - { name: TransCompanyPolicy, class: App\Services\Carrier\Policies\TransCompanyPolicy }
+                - { name: PackGroupPolicy, class: App\Services\Carrier\Policies\PackGroupPolicy }

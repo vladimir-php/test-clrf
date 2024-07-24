@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CarrierRepository;
 use App\Services\Carrier\CarrierService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,9 +22,9 @@ class CarrierController extends AbstractController
      * @return Response
      */
     #[Route('/', methods: 'GET')]
-    public function list(CarrierService $service): Response
+    public function list(CarrierService $service, CarrierRepository $repository): Response
     {
-        return $this->json(['success' => true, 'list' => $service->getNames()]);
+        return $this->json(['success' => true, 'list' => $repository->getIdNameList()]);
     }
 
 

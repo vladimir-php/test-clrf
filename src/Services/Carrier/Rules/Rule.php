@@ -20,6 +20,6 @@ abstract class Rule
      *
      * @return int|float
      */
-    abstract function getCost(int|float $value): int|float;
+    abstract function getCost(int|float $weight): int|float;
 
 }
