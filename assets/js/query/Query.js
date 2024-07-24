@@ -57,7 +57,7 @@ export default class Query {
             response = await axios(axiosArgs);
         }
         catch(e) {
-            response = e.response.data;
+            response = e.response;
         }
 
         return new Response(response);

@@ -20,20 +20,22 @@ class CarrierController extends AbstractController
 {
 
     /**
-     * @param  CarrierService     $service
      * @param  CarrierRepository  $repository
      *
      * @return Response
      */
     #[Route('/', methods: 'GET')]
-    public function list(CarrierService $service, CarrierRepository $repository): Response
+    public function list(CarrierRepository $repository): Response
     {
         return $this->json(['success' => true, 'list' => $repository->getIdNameList()]);
     }
 
 
     /**
-     * @param  CarrierService  $service
+     * @param  CarrierCalcPriceValidator  $request
+     * @param  CarrierRepository          $carrierRepository
+     * @param  CarrierService             $service
+     * @param  PolicyFactory              $policyFactory
      *
      * @return Response
      */
@@ -63,10 +65,10 @@ class CarrierController extends AbstractController
             return $this->json(['success' => true, 'data' => ['price' => $price]]);
         }
         catch (ValidationException $e) {
-            return $this->json(['success' => false, 'errors' => $e->getErrors()]);
+            return $this->json(['success' => false, 'errors' => $e->getErrors()], 422);
         }
         catch (Exception $e) {
-            return $this->json(['success' => false, 'errors' => $e->getMessage()]);
+            return $this->json(['success' => false, 'errors' => $e->getMessage()], 500);
         }
     }
 

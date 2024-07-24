@@ -40,7 +40,7 @@ export default class Response {
      * @returns {*}
      */
     errors() {
-        return this.response.data.errors ?? [];
+        return this.response.data.errors ?? this.response.data;
     }
 
 }

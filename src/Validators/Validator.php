@@ -31,9 +31,9 @@ abstract class Validator
                 $this->validate($this->data);
             }
 
-            // ?? @todo: to hard coded
+            // ?? @todo: to hardcoded: make a separate Response class to avoid duplication
             catch (ValidationException $e) {
-                $response = new JsonResponse($e->getErrors(), 403);
+                $response = new JsonResponse($e->getErrors(), 422);
                 $response->send();
                 exit;
             }
