@@ -32,12 +32,4 @@ class CarrierCalcPriceValidator extends Validator
         ];
     }
 
-    /**
-     * @return bool
-     */
-    protected function autoValidateRequest(): bool
-    {
-        return false;
-    }
-
 }

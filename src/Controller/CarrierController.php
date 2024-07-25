@@ -8,6 +8,7 @@ use App\Services\Carrier\CarrierService;
 use App\Services\Carrier\PolicyFactory;
 use App\Validators\Carrier\CarrierCalcPriceValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Exception;
@@ -34,6 +35,7 @@ class CarrierController extends AbstractController
 
 
     /**
+     * @param  Request                    $request
      * @param  CarrierCalcPriceValidator  $validator
      * @param  CarrierRepository          $carrierRepository
      * @param  CarrierService             $service
@@ -43,16 +45,17 @@ class CarrierController extends AbstractController
      */
     #[Route('/calculate-price', methods: 'POST')]
     public function calculatePrice(
+        Request $request,
         CarrierCalcPriceValidator $validator,
         CarrierRepository $carrierRepository,
         CarrierService $service,
-        PolicyFactory $policyFactory,
+        PolicyFactory $policyFactory
     ): Response
     {
         try {
 
             // Carrier calc price request validation
-            $validator->validate();
+            $validator->validate($request);
 
             // Trying to get a carrier by ID
             $carrier = $carrierRepository->find($validator->get('carrier_id') );

@@ -22,29 +22,17 @@ abstract class Validator
      */
     public function __construct(protected ValidatorInterface $validator)
     {
-        $request = Request::createFromGlobals();
-        $this->data = $request->getContent() ? $request->toArray() : $request->query->all();
-
-        if ($this->autoValidateRequest()) {
-            try {
-                $this->validate();
-            }
-
-            // ?? @todo: to hardcoded: make a separate Response class to avoid duplication
-            catch (ValidationException $e) {
-                $response = new JsonResponse($e->getErrors(), 422);
-                $response->send();
-                exit;
-            }
-        }
     }
 
     /**
      * @return void
      * @throws ValidationException
      */
-    public function validate(): void
+    public function validate(Request $request): void
     {
+        $this->data = $request->getContent() ?
+            $request->toArray() : $request->query->all();
+
         $this->validateData($this->data);
     }
 
@@ -87,14 +75,6 @@ abstract class Validator
         }
 
         throw new ValidationException($errors);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function autoValidateRequest(): bool
-    {
-        return true;
     }
 
     /**
