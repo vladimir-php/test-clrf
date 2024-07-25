@@ -24,6 +24,17 @@ services:
       - db
     container_name: testclrf_php
 
+  #node:
+  #  build:
+  #    dockerfile: ./docker/node/Dockerfile
+  #  ports:
+  #    - 8080:8080
+  #  volumes:
+  #    - ./:/var/www
+  #  depends_on:
+  #    - php
+  #  container_name: testclrf_node
+
   db:
     image: mariadb:10.11
     restart: always
