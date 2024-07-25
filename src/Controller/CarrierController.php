@@ -55,10 +55,10 @@ class CarrierController extends AbstractController
         try {
 
             // Carrier calc price request validation
-            $validator->validate($request);
+            $data = $validator->validate($request);
 
             // Trying to get a carrier by ID
-            $carrier = $carrierRepository->find($validator->get('carrier_id') );
+            $carrier = $carrierRepository->find($data->get('carrier_id') );
             if (!$carrier) {
                 throw (new ValidationException())->addError('carrier_id', 'Undefined carrier.');
             }
@@ -67,7 +67,7 @@ class CarrierController extends AbstractController
             $policy = $policyFactory->create($carrier->getPolicy());
 
             // Calculating a price for the weight
-            $price = $service->calculate($policy, $validator->get('weight'));
+            $price = $service->calculate($policy, $data->get('weight'));
 
             return $this->json(['success' => true, 'data' => ['price' => $price]]);
         }

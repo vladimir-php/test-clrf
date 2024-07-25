@@ -4,7 +4,6 @@ namespace App\Validators;
 
 use App\Exceptions\ValidationException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -12,10 +11,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 abstract class Validator
 {
-    /**
-     * @var array
-     */
-    protected array $data = [];
 
     /**
      * @param  ValidatorInterface  $validator
@@ -25,42 +20,35 @@ abstract class Validator
     }
 
     /**
-     * @return void
+     * @param  Request  $request
+     *
+     * @return ValidationData
      * @throws ValidationException
      */
-    public function validate(Request $request): void
+    public function validate(Request $request): ValidationData
     {
-        $this->data = $request->getContent() ?
-            $request->toArray() : $request->query->all();
+        // Creating a validation data
+        $validationData = new ValidationData(
+            $request->getContent() ? $request->toArray() : $request->query->all()
+        );
 
-        $this->validateData($this->data);
+        // Validate
+        $this->validateData($validationData);
+
+        return $validationData;
     }
 
     /**
-     * @param  string      $key
-     * @param  mixed|null  $default
-     *
-     * @return mixed
-     */
-    public function get(string $key, mixed $default = null): mixed
-    {
-        if (!array_key_exists($key, $this->data) ) {
-            return $default;
-        }
-        return $this->data[$key];
-    }
-
-    /**
-     * @param  array  $data
+     * @param  ValidationData  $validationData
      *
      * @return void
      * @throws ValidationException
      */
-    public function validateData(array $data): void
+    public function validateData(ValidationData $validationData): void
     {
         $errors = [];
         foreach($this->constraints() as $field => $asserts) {
-            $errorMessages = $this->validator->validate(array_key_exists($field, $data) ? $data[$field] : null, $asserts);
+            $errorMessages = $this->validator->validate($validationData->get($field), $asserts);
             if (!count($errorMessages) ) {
                 continue;
             }
