@@ -38,7 +38,7 @@ class PolicyFactory
     {
         $class = $this->findClass($name);
         if (!$class) {
-            throw new Exception('Policy class for '.$name.'does not found.');
+            throw new Exception('Policy class for '.$name.' does not found.');
         }
         if (is_subclass_of($class, 'PolicyInterface')) {
             throw new Exception('Policy '.$name.' is not an instance of '. PolicyInterface::class .'.');
@@ -54,10 +54,8 @@ class PolicyFactory
      */
     protected function findClass(string $name): ?string
     {
-        if (array_key_exists($name, $this->policies) ) {
-            return $this->policies[$name];
-        }
-        $class = 'App\Services\Carrier\Policies\\'.$name;
+        $class = array_key_exists($name, $this->policies) ?
+            $this->policies[$name] : 'App\Services\Carrier\Policies\\'.$name;
         if (class_exists($class) ) {
             return $class;
         }
