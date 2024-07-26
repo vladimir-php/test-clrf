@@ -63,10 +63,10 @@ class CarrierController extends AbstractController
                 throw (new ValidationException())->addError('carrier_id', 'Undefined carrier.');
             }
 
-            // Getting a policy by a carrier
+            // Creating a policy by a name
             $policy = $policyFactory->create($carrier->getPolicy());
 
-            // Calculating a price for the weight
+            // Calculating a price for the weight provided
             $price = $service->calculate($policy, $data->get('weight'));
 
             return $this->json(['success' => true, 'data' => ['price' => $price]]);
