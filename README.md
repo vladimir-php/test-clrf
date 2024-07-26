@@ -2,7 +2,7 @@
 
 ## Run the following commands in the same order in the project directory:
 
-* `docker-compose up --build`
+* `docker-compose up --build -d`
 * `docker exec testclrf_php composer install`
 * `docker exec testclrf_php php bin/console doctrine:migrations:migrate --no-interaction`
 * `docker exec testclrf_php php bin/console doctrine:fixtures:load --no-interaction`
